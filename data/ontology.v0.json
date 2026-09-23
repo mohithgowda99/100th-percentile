@@ -1,0 +1,244 @@
+{
+  "version": "0.1",
+  "status": "seed_not_complete",
+  "sections": {
+    "quant": {
+      "formats": [
+        "problem_solving"
+      ],
+      "archetypes": [
+        {
+          "id": "Q_ALG_LINEAR",
+          "name": "Linear equations",
+          "primitives": [
+            "translate",
+            "isolate",
+            "substitute"
+          ],
+          "source_basis": "GMAT Club Algebra Patterns"
+        },
+        {
+          "id": "Q_ALG_QUADRATIC",
+          "name": "Quadratics and factoring",
+          "primitives": [
+            "factor",
+            "test_values"
+          ],
+          "source_basis": "GMAT Club Algebra Patterns"
+        },
+        {
+          "id": "Q_RATE_WORK",
+          "name": "Work and rate",
+          "primitives": [
+            "normalize",
+            "proportional_reasoning",
+            "unit_convert"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_RATE_DISTANCE",
+          "name": "Distance and speed",
+          "primitives": [
+            "proportional_reasoning",
+            "unit_convert"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_PERCENT",
+          "name": "Percent and interest",
+          "primitives": [
+            "normalize",
+            "proportional_reasoning"
+          ],
+          "source_basis": "GMAT Club syllabus analysis"
+        },
+        {
+          "id": "Q_OVERLAP",
+          "name": "Overlapping sets",
+          "primitives": [
+            "set_overlap",
+            "translate"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_REMAINDER",
+          "name": "Remainders",
+          "primitives": [
+            "test_values",
+            "enumerate_cases"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_SEQUENCE",
+          "name": "Sequences",
+          "primitives": [
+            "translate",
+            "estimate"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_FUNCTION",
+          "name": "Functions and custom characters",
+          "primitives": [
+            "translate",
+            "substitute"
+          ],
+          "source_basis": "GMAT Club Question Patterns"
+        },
+        {
+          "id": "Q_STATS",
+          "name": "Statistics and sets",
+          "primitives": [
+            "weighted_average",
+            "compare"
+          ],
+          "source_basis": "GMAT Club syllabus analysis"
+        },
+        {
+          "id": "Q_PROBABILITY",
+          "name": "Probability and combinations",
+          "primitives": [
+            "enumerate_cases",
+            "compare"
+          ],
+          "source_basis": "GMAT Club syllabus analysis"
+        }
+      ]
+    },
+    "verbal": {
+      "formats": [
+        "critical_reasoning",
+        "reading_comprehension"
+      ],
+      "archetypes": [
+        {
+          "id": "V_CR_ASSUMPTION",
+          "name": "Assumption",
+          "primitives": [
+            "identify_conclusion",
+            "identify_evidence",
+            "identify_assumption",
+            "negate_assumption"
+          ]
+        },
+        {
+          "id": "V_CR_STRENGTHEN_WEAKEN",
+          "name": "Strengthen / weaken",
+          "primitives": [
+            "identify_conclusion",
+            "identify_assumption",
+            "causal_alternative",
+            "scope_check"
+          ]
+        },
+        {
+          "id": "V_CR_INFERENCE",
+          "name": "Inference / must be true",
+          "primitives": [
+            "inference_only",
+            "eliminate_unsupported"
+          ]
+        },
+        {
+          "id": "V_CR_EVALUATE",
+          "name": "Evaluate argument",
+          "primitives": [
+            "identify_assumption",
+            "causal_alternative"
+          ]
+        },
+        {
+          "id": "V_CR_PARADOX",
+          "name": "Resolve paradox",
+          "primitives": [
+            "resolve_discrepancy",
+            "scope_check"
+          ]
+        },
+        {
+          "id": "V_RC_MAIN",
+          "name": "RC main idea / purpose",
+          "primitives": [
+            "map_passage_structure"
+          ]
+        },
+        {
+          "id": "V_RC_DETAIL",
+          "name": "RC specific detail",
+          "primitives": [
+            "scope_check",
+            "eliminate_unsupported"
+          ]
+        },
+        {
+          "id": "V_RC_INFERENCE",
+          "name": "RC inference",
+          "primitives": [
+            "inference_only",
+            "strength_check"
+          ]
+        }
+      ]
+    },
+    "data_insights": {
+      "formats": [
+        "data_sufficiency",
+        "multi_source_reasoning",
+        "table_analysis",
+        "graphics_interpretation",
+        "two_part_analysis"
+      ],
+      "archetypes": [
+        {
+          "id": "D_DS",
+          "name": "Data sufficiency",
+          "primitives": [
+            "sufficiency_not_value",
+            "constraint_intersection",
+            "conditional_reasoning"
+          ]
+        },
+        {
+          "id": "D_TABLE",
+          "name": "Table analysis",
+          "primitives": [
+            "filter",
+            "sort",
+            "denominator_check"
+          ]
+        },
+        {
+          "id": "D_GRAPH",
+          "name": "Graphics interpretation",
+          "primitives": [
+            "graph_read",
+            "denominator_check"
+          ]
+        },
+        {
+          "id": "D_MSR",
+          "name": "Multi-source reasoning",
+          "primitives": [
+            "cross_source_reconcile",
+            "relevance_filter",
+            "inference_only"
+          ]
+        },
+        {
+          "id": "D_TPA",
+          "name": "Two-part analysis",
+          "primitives": [
+            "two_part_dependency",
+            "constraint_intersection",
+            "conditional_reasoning"
+          ]
+        }
+      ]
+    }
+  }
+}
