@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>100th Percentile</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">GMAT performance system</p>
+        <h1>100th Percentile</h1>
+      </div>
+      <div class="target"><span id="days">--</span><small>days to Nov 20</small></div>
+    </header>
+
+    <nav class="tabs" aria-label="Primary">
+      <button class="tab active" data-view="dashboard">Dashboard</button>
+      <button class="tab" data-view="train">Train</button>
+      <button class="tab" data-view="atlas">Atlas</button>
+      <button class="tab" data-view="mock">Mocks</button>
+    </nav>
+
+    <section id="dashboard" class="view active">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Current mission</p>
+          <h2>Build the score, not the syllabus.</h2>
+          <p class="muted">Every session should remove a specific blocker between your current state and 735+.</p>
+        </div>
+        <button id="startToday" class="primary">Begin today's training</button>
+      </div>
+
+      <div class="metrics">
+        <article><span id="attempts">0</span><small>attempts</small></article>
+        <article><span id="accuracy">0%</span><small>accuracy</small></article>
+        <article><span id="avgTime">0s</span><small>avg time</small></article>
+        <article><span id="mockScore">—</span><small>latest mock</small></article>
+      </div>
+
+      <article class="focus-card">
+        <p class="eyebrow">Highest-value target</p>
+        <h3 id="focusTarget">Take the cold official diagnostic first</h3>
+        <p id="focusWhy" class="muted">Until we have attempt data, the engine has no right to pretend it knows your bottleneck.</p>
+      </article>
+    </section>
+
+    <section id="train" class="view">
+      <div id="trainStart" class="panel">
+        <p class="eyebrow">Training modes</p>
+        <h2>Quant foundation v0.1</h2>
+        <p class="muted">Solve, time, rate confidence, then inspect the skeleton and the trap.</p>
+        <div class="mode-grid">
+          <button class="mode-card" data-mode="foundation">
+            <strong>Foundation</strong>
+            <span>Ordered from simpler primitives upward.</span>
+          </button>
+          <button class="mode-card" data-mode="mixed">
+            <strong>Mixed</strong>
+            <span>Interleaved questions to force discrimination.</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="trainer" class="panel hidden">
+        <div class="progress-row">
+          <span id="questionCounter">1 / 8</span>
+          <span id="timer">0:00</span>
+        </div>
+        <p class="eyebrow" id="difficulty">Difficulty 1</p>
+        <h2 id="prompt"></h2>
+        <div id="options" class="options"></div>
+
+        <div class="confidence-row">
+          <label for="confidence">Confidence <strong id="confidenceValue">70%</strong></label>
+          <input id="confidence" type="range" min="0" max="100" value="70">
+        </div>
+
+        <button id="submitAnswer" class="primary" disabled>Submit answer</button>
+
+        <div id="feedback" class="feedback hidden">
+          <div id="verdict" class="verdict"></div>
+          <p><strong>Archetype</strong><br><span id="archetype"></span></p>
+          <p><strong>Skeleton</strong><br><span id="skeleton"></span></p>
+          <p><strong>Trap</strong><br><span id="trap"></span></p>
+          <p><strong>Solution</strong><br><span id="explanation"></span></p>
+          <button id="nextQuestion" class="secondary">Next question</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="atlas" class="view">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Pattern map</p>
+          <h2>Atlas seed</h2>
+        </div>
+        <p class="muted">This grows from official-material metadata and validated synthetic drills.</p>
+      </div>
+      <div id="atlasGrid" class="atlas-grid"></div>
+    </section>
+
+    <section id="mock" class="view">
+      <div class="panel">
+        <p class="eyebrow">Official calibration</p>
+        <h2>Log a mock</h2>
+        <p class="muted">Fresh official mocks are our reality check. Retakes are training data, not pristine score estimates.</p>
+        <form id="mockForm" class="mock-form">
+          <label>Name<input name="name" placeholder="Official Practice Exam 1" required></label>
+          <label>Total<input name="total_score" type="number" min="205" max="805"></label>
+          <label>Quant<input name="quant_score" type="number" min="60" max="90"></label>
+          <label>Verbal<input name="verbal_score" type="number" min="60" max="90"></label>
+          <label>DI<input name="di_score" type="number" min="60" max="90"></label>
+          <label class="wide">Notes<textarea name="notes" placeholder="Timing, freezes, guesses, sections that felt unstable..."></textarea></label>
+          <button class="primary" type="submit">Save mock</button>
+        </form>
+        <p id="mockStatus" class="muted"></p>
+      </div>
+    </section>
+  </main>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
