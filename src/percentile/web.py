@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from datetime import date
 from pathlib import Path
-from typing import Literal
-
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -34,6 +32,13 @@ class AttemptIn(BaseModel):
     self_reported_error: ErrorCause | None = None
 
 
+class RecognitionAttemptIn(BaseModel):
+    question_id: str
+    selected_archetype_id: str
+    response_seconds: float = Field(ge=0)
+    confidence: float | None = Field(default=None, ge=0, le=1)
+
+
 class MockIn(BaseModel):
     name: str = Field(min_length=1, max_length=80)
     total_score: int | None = Field(default=None, ge=205, le=805)
@@ -59,6 +64,12 @@ def session(
     limit: int = Query(default=8, ge=1, le=20),
 ):
     questions = build_session(mode=mode, limit=limit)
+    archetype_choices = [
+        {"id": archetype_id, "name": archetype_name}
+        for archetype_id, archetype_name in sorted(
+            {(q.archetype_id, q.archetype_name) for q in SEED_QUESTIONS}
+        )
+    ]
     return {
         "mode": mode.value,
         "questions": [
@@ -68,6 +79,7 @@ def session(
                 "prompt": q.prompt,
                 "options": q.options,
                 "difficulty": q.difficulty,
+                **({"archetype_choices": archetype_choices} if mode == SessionMode.RECOGNITION else {}),
             }
             for q in questions
         ],
@@ -108,6 +120,30 @@ def attempt(payload: AttemptIn):
     }
 
 
+@app.post("/api/recognition-attempt")
+def recognition_attempt(payload: RecognitionAttemptIn):
+    question = QUESTION_BY_ID.get(payload.question_id)
+    if question is None:
+        raise HTTPException(status_code=404, detail="Unknown question")
+
+    correct = payload.selected_archetype_id == question.archetype_id
+    get_store().save_recognition_attempt(
+        question_id=question.id,
+        selected_archetype_id=payload.selected_archetype_id,
+        correct=correct,
+        response_seconds=payload.response_seconds,
+        confidence=payload.confidence,
+    )
+    return {
+        "correct": correct,
+        "archetype_id": question.archetype_id,
+        "archetype_name": question.archetype_name,
+        "skeleton": question.skeleton,
+        "trap": question.trap,
+        "explanation": question.explanation,
+    }
+
+
 @app.get("/api/dashboard")
 def dashboard():
     store = get_store()
@@ -117,6 +153,7 @@ def dashboard():
         "target_date": TARGET_DATE.isoformat(),
         "days_remaining": max(0, (TARGET_DATE - date.today()).days),
         "summary": summary,
+        "recognition": store.recognition_summary(),
         "latest_mock": store.latest_mock(),
         "top_recommendation": (
             {
