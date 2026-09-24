@@ -1,6 +1,8 @@
 let currentSession=[];
 let currentIndex=0;
+let currentMode='foundation';
 let selectedIndex=null;
+let selectedArchetypeId=null;
 let startedAt=0;
 let timerId=null;
 
@@ -42,6 +44,7 @@ async function loadAtlas(){
 async function startSession(mode='foundation'){
   const data=await fetch('/api/session?mode='+mode+'&limit=8').then(r=>r.json());
   currentSession=data.questions;
+  currentMode=mode;
   currentIndex=0;
   $('trainStart').classList.add('hidden');
   $('trainer').classList.remove('hidden');
@@ -52,14 +55,19 @@ async function startSession(mode='foundation'){
 function renderQuestion(){
   const q=currentSession[currentIndex];
   selectedIndex=null;
+  selectedArchetypeId=null;
   $('feedback').classList.add('hidden');
   $('submitAnswer').disabled=true;
   $('questionCounter').textContent=`${currentIndex+1} / ${currentSession.length}`;
-  $('difficulty').textContent='Difficulty '+q.difficulty;
+  $('difficulty').textContent=currentMode==='recognition'?'Recognition only · do not solve':'Difficulty '+q.difficulty;
   $('prompt').textContent=q.prompt;
-  $('options').innerHTML=q.options.map((o,i)=>`<button class="option" data-index="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');
+  const choices=currentMode==='recognition'
+    ? q.archetype_choices.map((o,i)=>({label:o.name,value:o.id,prefix:String.fromCharCode(65+i)}))
+    : q.options.map((o,i)=>({label:o,value:i,prefix:String.fromCharCode(65+i)}));
+  $('options').innerHTML=choices.map(o=>`<button class="option" data-value="${o.value}">${o.prefix}. ${o.label}</button>`).join('');
   document.querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>{
-    selectedIndex=Number(btn.dataset.index);
+    if(currentMode==='recognition') selectedArchetypeId=btn.dataset.value;
+    else selectedIndex=Number(btn.dataset.value);
     document.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));
     btn.classList.add('selected');
     $('submitAnswer').disabled=false;
@@ -75,17 +83,25 @@ function renderQuestion(){
 $('confidence').addEventListener('input',e=>$('confidenceValue').textContent=e.target.value+'%');
 
 $('submitAnswer').addEventListener('click',async()=>{
-  if(selectedIndex===null)return;
+  if(currentMode==='recognition' ? !selectedArchetypeId : selectedIndex===null)return;
   clearInterval(timerId);
   const q=currentSession[currentIndex];
   const seconds=(Date.now()-startedAt)/1000;
-  const payload={
-    question_id:q.id,
-    selected_index:selectedIndex,
-    response_seconds:seconds,
-    confidence:Number($('confidence').value)/100
-  };
-  const res=await fetch('/api/attempt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const payload=currentMode==='recognition'
+    ? {
+        question_id:q.id,
+        selected_archetype_id:selectedArchetypeId,
+        response_seconds:seconds,
+        confidence:Number($('confidence').value)/100
+      }
+    : {
+        question_id:q.id,
+        selected_index:selectedIndex,
+        response_seconds:seconds,
+        confidence:Number($('confidence').value)/100
+      };
+  const endpoint=currentMode==='recognition'?'/api/recognition-attempt':'/api/attempt';
+  const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   const data=await res.json();
   document.querySelectorAll('.option').forEach(x=>x.disabled=true);
   $('feedback').classList.remove('hidden');
@@ -94,7 +110,9 @@ $('submitAnswer').addEventListener('click',async()=>{
   $('archetype').textContent=data.archetype_name;
   $('skeleton').textContent=data.skeleton;
   $('trap').textContent=data.trap;
-  $('explanation').textContent=data.explanation;
+  $('explanation').textContent=currentMode==='recognition'
+    ? 'Recognition goal: identify the structure before doing the arithmetic. '+data.explanation
+    : data.explanation;
   $('submitAnswer').disabled=true;
   loadDashboard();
 });
