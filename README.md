@@ -47,3 +47,28 @@ Build:
 6. Mohith's official-mock performance improves.
 
 See [SPEC.md](SPEC.md).
+
+
+## Run the web app
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+percentile-web
+```
+
+Open `http://127.0.0.1:8000`.
+
+Current usable slice:
+- responsive dashboard;
+- Quant foundation and mixed sessions;
+- **Skeleton Vision** archetype-recognition mode;
+- timer + confidence capture;
+- skeleton/trap/solution feedback;
+- local learner-state database;
+- Atlas view;
+- official-mock logging;
+- transparent next-target recommendation.
+
+The seed questions are original synthetic drills. Official GMAT material remains the calibration layer and is referenced by metadata rather than copied into the repository.
