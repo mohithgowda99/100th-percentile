@@ -2,6 +2,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from percentile.questions import QUESTION_BY_ID
 from percentile.web import app
 
 
@@ -66,9 +67,10 @@ def test_recognition_flow(tmp_path, monkeypatch):
     assert "archetype_choices" in question
     assert "correct_index" not in question
 
+    expected_archetype = QUESTION_BY_ID[question["id"]].archetype_id
     correct_choice = next(
         choice for choice in question["archetype_choices"]
-        if choice["id"] == "Q_ALG_LINEAR"
+        if choice["id"] == expected_archetype
     )
     response = client.post(
         "/api/recognition-attempt",
