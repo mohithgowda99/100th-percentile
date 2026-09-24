@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from contextlib import closing
-from datetime import datetime
+from datetime import UTC, datetime
 import json
 import os
 from pathlib import Path
@@ -88,7 +88,7 @@ class Store:
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    datetime.utcnow().isoformat(),
+                    datetime.now(UTC).isoformat(),
                     question_id,
                     selected_index,
                     int(correct),
@@ -145,7 +145,7 @@ class Store:
                 ) VALUES (?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    datetime.utcnow().isoformat(),
+                    datetime.now(UTC).isoformat(),
                     question_id,
                     selected_archetype_id,
                     int(correct),
@@ -182,7 +182,7 @@ class Store:
                 INSERT INTO mocks (created_at, name, total_score, quant_score, verbal_score, di_score, notes)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                (datetime.utcnow().isoformat(), name, total_score, quant_score, verbal_score, di_score, notes),
+                (datetime.now(UTC).isoformat(), name, total_score, quant_score, verbal_score, di_score, notes),
             )
             conn.commit()
 
