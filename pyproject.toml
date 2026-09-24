@@ -1,12 +1,18 @@
 [project]
 name = "percentile"
-version = "0.1.0"
+version = "0.2.0"
 description = "GMAT pattern, error, mastery and adaptive-training engine"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+  "fastapi>=0.141,<0.142",
+  "uvicorn[standard]>=0.35",
+]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = [
+  "pytest>=8.0",
+  "httpx>=0.27",
+]
 learning = [
   "pyBKT>=1.4",
   "py-fsrs>=1.0",
@@ -15,6 +21,12 @@ cat = [
   "catsim>=0.20",
   "py-irt>=0.6",
 ]
+
+[project.scripts]
+percentile-web = "percentile.web:run"
+
+[tool.setuptools.package-data]
+percentile = ["web_assets/*"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
