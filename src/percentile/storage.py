@@ -44,6 +44,16 @@ class Store:
                     skill_ids TEXT NOT NULL
                 );
 
+                CREATE TABLE IF NOT EXISTS recognition_attempts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    created_at TEXT NOT NULL,
+                    question_id TEXT NOT NULL,
+                    selected_archetype_id TEXT NOT NULL,
+                    correct INTEGER NOT NULL,
+                    response_seconds REAL NOT NULL,
+                    confidence REAL
+                );
+
                 CREATE TABLE IF NOT EXISTS mocks (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     created_at TEXT NOT NULL,
@@ -110,6 +120,45 @@ class Store:
         with closing(self.connect()) as conn:
             attempts, correct, avg_seconds = conn.execute(
                 "SELECT COUNT(*), COALESCE(SUM(correct), 0), COALESCE(AVG(response_seconds), 0) FROM attempts"
+            ).fetchone()
+        return {
+            "attempts": attempts,
+            "accuracy": (correct / attempts) if attempts else 0.0,
+            "avg_seconds": float(avg_seconds or 0.0),
+        }
+
+    def save_recognition_attempt(
+        self,
+        *,
+        question_id: str,
+        selected_archetype_id: str,
+        correct: bool,
+        response_seconds: float,
+        confidence: float | None,
+    ) -> None:
+        with closing(self.connect()) as conn:
+            conn.execute(
+                """
+                INSERT INTO recognition_attempts (
+                    created_at, question_id, selected_archetype_id, correct,
+                    response_seconds, confidence
+                ) VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    datetime.utcnow().isoformat(),
+                    question_id,
+                    selected_archetype_id,
+                    int(correct),
+                    response_seconds,
+                    confidence,
+                ),
+            )
+            conn.commit()
+
+    def recognition_summary(self) -> dict[str, float | int]:
+        with closing(self.connect()) as conn:
+            attempts, correct, avg_seconds = conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(correct), 0), COALESCE(AVG(response_seconds), 0) FROM recognition_attempts"
             ).fetchone()
         return {
             "attempts": attempts,
