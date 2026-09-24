@@ -41,7 +41,7 @@ h3{font-size:22px;letter-spacing:-.025em}
 .metrics span{font-size:28px;font-weight:800;letter-spacing:-.04em}
 .metrics small{color:var(--muted)}
 .focus-card{margin-top:12px}
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .mode-card{background:var(--panel2);color:var(--text);text-align:left;padding:22px;display:flex;flex-direction:column;gap:8px}
 .mode-card:hover{border-color:#56565f}
 .mode-card span{color:var(--muted);line-height:1.45}
